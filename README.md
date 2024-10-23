@@ -1,8 +1,36 @@
 ![安装](https://img.shields.io/badge/安装-npm_i_@soei/util-ffc107?style=flat) [![Latest Version on NPM](https://img.shields.io/badge/✔-线上实例-ae8aff?style=flat)](https://alwbg.github.io)
 
-# JavaScript轻量工具类~ [![Latest Version on NPM](https://img.shields.io/npm/v/@soei/util?label=npm&style=flat-square)](https://npmjs.com/package/@soei/util) ![Software License](https://img.shields.io/badge/license-ISC-brightgreen?label=&style=flat-square) [![npm](https://img.shields.io/npm/dw/@soei/util?label=Downloads&style=flat-square)](https://www.npmjs.com/package/@soei/util) ![npm bundle size](https://img.shields.io/bundlephobia/min/%40soei%2Futil?label=Size&color=&style=flat-square)
+# JavaScript 轻量工具类~ [![Latest Version on NPM](https://img.shields.io/npm/v/@soei/util?label=npm&style=flat-square)](https://npmjs.com/package/@soei/util) ![Software License](https://img.shields.io/badge/license-ISC-brightgreen?label=&style=flat-square) [![npm](https://img.shields.io/npm/dw/@soei/util?label=Downloads&style=flat-square)](https://www.npmjs.com/package/@soei/util) ![npm bundle size](https://img.shields.io/bundlephobia/min/%40soei%2Futil?label=Size&color=&style=flat-square)
 
 ## 更新日志
+
+### 1.1.5
+
+- #### 新增 Api.js
+
+  ```javascript
+  // 引入方式
+  const {Api} = require("@soei/util/Api");
+  // 流模式请求(类似chatGPT,取决接口返回头信息内是否包含:text/event-stream;)
+  Api({
+      // 如果不存在,所在域名下 //xxx:000
+      host: 'http://...',
+      url: '/ai',
+      headers: {
+          authorization: 'Bearer ..........',
+      },
+      type: 'json|form',
+      data: {}|'{}'|'a=b&...',
+
+      onMessage|onmessage|message|process: (json) => {
+        // 处理返回值
+      },
+      err() {
+
+      },
+      ...
+  })
+  ```
 
 ### 1.1.2
 

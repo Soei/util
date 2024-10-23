@@ -1,5 +1,5 @@
 const { isNil, isEmpty } = require('@soei/tools');
-let { change, reset, array2Json, time, picker, cookie, Between, differ } = require('./index')
+let { change, reset, array2Json, time, picker, cookie, Between, differ, runer } = require('./index')
 let ap = require('./index')
 let local = ap.local
 
@@ -72,7 +72,7 @@ console.log(cookie.set('name', 'apple', 10 /* 天 */))
 console.log(cookie.get('name'))
 
 
-console.log(local?.get('name'))
+// console.log(local?.get('name'))
 
 
 data = new Between({
@@ -101,3 +101,50 @@ differ({
 }, (key, isExist) => {
     console.log(key, isExist)
 })
+
+
+let fu =  () => {
+    return new Promise(function (resolve, reject) {
+        setTimeout(() => {
+            resolve(1)
+        }, 1000)
+    })
+}
+
+let 结果 = runer(fu);
+
+console.log(结果.then(() => {
+    console.log('ok')
+}))
+
+function 行为() {
+    console.log('行为输出::')
+}
+function* 迭代() {
+    yield new Promise((resolve) => {
+        // resolve(1)
+        setTimeout(() => {  
+            resolve(100)
+        }, 3000);
+    })
+    yield new Promise((resolve) => {
+        resolve(2)
+    })
+    yield new Promise((resolve) => {
+        resolve(3)
+    })
+}
+行为();
+let 临时 = 迭代();
+结果 = 临时.next();
+console.log(结果.value.then((res)=> {
+    console.log(res, 'res');
+}))
+结果 = 临时.next();
+console.log(结果.value.then((res)=> {
+    console.log(res, 'res');
+}))
+结果 = 临时.next();
+console.log(结果.value.then((res)=> {
+    console.log(res, 'res');
+}))
