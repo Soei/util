@@ -43,6 +43,11 @@ export let Api = async (data = {}) => {
     data,
     "onMessage|onmessage|message|process=>msg,onErr|onerr|err=>err"
   );
+  // 处理get请求参数问题
+  if (/get/i.test(data.method)) {
+    data.url += (data.url.indexOf('?') >= 0 ? '&' : '?') + params;
+    params = undefined;
+  }
   let Process = Fx.msg;
   let Err = Fx.err;
   // 创建打断控制器, 如果对话途中取消
