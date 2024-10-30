@@ -4,6 +4,74 @@
 
 ## 更新日志
 
+### 1.1.7
+
+- ### Api.js
+
+  #### - 新增 `写法` 和 属性 `default: true`
+
+  ```javascript
+  import request from "@soei/util/Api";
+  let Api = request.Api;
+
+  // 其他Api获取
+  import { Api } from "@soei/util/Api";
+
+  async () => {
+    // 没有 Promise.then方法调用
+    request({
+      url: "...",
+      onmessage(res) {},
+    });
+    // 等同于
+    Api({
+      url: "...",
+      onmessage(res) {},
+    });
+
+    // 下面含有两个兼容性调用
+    request({
+      url: "...",
+    }).then((res) => {});
+    let res = await request({});
+
+    // 新增 default 属性
+    await Api({
+      // - 新增 default: true
+      default: true,
+    });
+    /* 返回原始对象
+    {
+      ...
+      body: (..),
+      ...
+    }
+    */
+    // or
+    Api({ default: true }).then((res) => {
+      // res 原始对象
+    });
+  };
+  ```
+
+  #### - 优化
+
+  如果请求返回文件(图片,请求头以 "application/...")
+
+  - 返回 Blob 对象
+
+  ```javascript
+  import { Api } from "@soei/util/Api";
+  async (data) => {
+    await Api({
+      host: "http://localhost/",
+      method: "get",
+      url: "/static/favicon.png",
+      data,
+    });
+  };
+  ```
+
 ### 1.1.6
 
 - #### 问题修复 Api.js
