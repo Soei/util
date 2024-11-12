@@ -54,29 +54,31 @@ export let Api = async (data = {}) => {
 	// 创建打断控制器, 如果对话途中取消
 	let controller = new AbortController();
 	// 创建链接
-	let res = await fetch(format("?/?", data.host, data.url), {
+	fetch(format("?/?", data.host, data.url), {
 		signal: controller.signal,
 		headers: data.headers,
 		body: params,
 		method: data.method,
 		mode: "cors",
 		credentials: "omit",
+	}).then(async (res) => {
+		res.abort = () => controller.abort();
+		if (data.default) {
+			return process(res, true);
+		}
+		let ctype = res.headers.get('content-type')
+		if (/event-stream/.test(ctype)) {
+			streamevent(res, process)
+		} else {
+			if (/application|image/.test(ctype)) {
+				process(await res.blob(), true)
+			} else {
+				process(await res.json())
+			}
+		}
 	}).catch((e) => {
 		runer(Err, e, e)
 	});
-	if (data.default) {
-		return process(res, true);
-	}
-	let ctype = res.headers.get('content-type')
-	if (/event-stream/.test(ctype)) {
-		await streamevent(res, process)
-	} else {
-		if (/application|image/.test(ctype)) {
-			process(await res.blob(), true)
-		} else {
-			process(await res.json())
-		}
-	}
 	return controller;
 };
 // 处理流式
@@ -101,7 +103,7 @@ let streamevent = async (res, back) => {
 					// if (json == "") return;
 					try {
 						json = new Function("return " + json)();
-						back(json);
+						back(json, res);
 					} catch (e) {
 						// return true;
 					}
@@ -112,7 +114,7 @@ let streamevent = async (res, back) => {
 		}
 	}
 	if (length) {
-		back(JSON.parse(helfdata.join("")))
+		back(JSON.parse(helfdata.join("")), res)
 	}
 }
 // 默认输出对象, 支持 Promise.then

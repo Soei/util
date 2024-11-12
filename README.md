@@ -4,6 +4,27 @@
 
 ## 更新日志
 
+### 1.1.8
+
+- ### Api.js
+
+```javascript
+  import request from "@soei/util/Api";
+  let Api = request.Api;
+
+  Api({
+    onmessage: (json, res) => {
+      ...
+      res.abort(); // 取消请求
+    }
+  })
+  // 或者
+  async () => {
+    let res = await Api({...})
+    res.abort(); // 取消请求
+  }
+```
+
 ### 1.1.7
 
 - ### Api.js
